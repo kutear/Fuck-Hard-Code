@@ -1,9 +1,9 @@
 package main
 
 import (
-	"encoding/xml"
+	"./utils"
+	_ "./utils"
 	"fmt"
-	"github.com/kutear/Fuck-Hard-Code/parser"
 	"io/ioutil"
 )
 
@@ -13,8 +13,9 @@ func main() {
 		fmt.Println(err.Error())
 		panic("读取文件失败")
 	}
-	fmt.Println(string(xmlFile))
-	s := &parser.DimensionComponent{}
-	xml.Unmarshal([]byte(xmlFile), &s)
-	fmt.Println(s)
+	element, err := utils.LoadByXml(string(xmlFile))
+	if err != nil {
+
+	}
+	utils.DealElement(element, "test.xml")
 }
