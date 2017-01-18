@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -27,6 +28,7 @@ func init() {
 	mAttrs["paddingRight"] = true
 	mAttrs["paddingStart"] = true
 	mAttrs["paddingTop"] = true
+	mAttrs["textSize"] = true
 
 	//常用的字符值
 	mAttrs["text"] = true
@@ -39,7 +41,10 @@ func init() {
  * 即形如“@string/***”就是非硬编码
  */
 func isHardCodeString(str string) bool {
-	return !strings.HasPrefix(str, "@string/") || !strings.HasPrefix(str, "?")
+	if strings.HasPrefix(str, "@string/") || strings.HasPrefix(str, "?") {
+		return false
+	}
+	return true
 }
 
 /**
@@ -48,10 +53,11 @@ func isHardCodeString(str string) bool {
  * 即形如“@dimen/***”就是非硬编码
  */
 func isHardCodeDimen(str string) bool {
-	if str == "martch_parent" || str == "warp_content" || str == "fill_parent" {
+	if str == "match_parent" || str == "wrap_content" || str == "fill_parent" || strings.HasPrefix(str, "@dimen/") ||
+		strings.HasPrefix(str, "?") {
 		return false
 	}
-	return !strings.HasPrefix(str, "@dimen/") || !strings.HasPrefix(str, "?")
+	return true
 }
 
 /**
@@ -61,14 +67,69 @@ func needToCheck(attr string) bool {
 	return mAttrs[attr]
 }
 
-func DealElement(element *Element, file string) {
+/**
+ * 处理当页面
+ */
+func modifyElement(element *Element) {
 	attrs := element.Attrs
 	for i := 0; i < len(attrs); i++ {
 		if needToCheck(attrs[i].Name()) {
-			attrs[i].Value = "change"
+			if attrs[i].Name() == "text" || attrs[i].Name() == "hint" {
+				modifyStringAttr(attrs[i])
+			} else {
+				modifyDimenAttr(attrs[i])
+			}
 		}
 	}
-	fmt.Println(element.ToXML())
+	childs := element.AllNodes()
+	for i := 0; i < len(childs); i++ {
+		modifyElement(childs[i])
+	}
+}
 
-	ioutil.WriteFile(file, []byte(element.ToXML()), 0644)
+/**
+ * file 文件全路径
+ * simple 文件名称
+ * outpath 输出路径
+ */
+func DealFile(file string, simple string, outpath string) {
+	xmlFile, err := ioutil.ReadFile(file)
+	if err != nil {
+		fmt.Println(err.Error())
+		panic("读取文件失败")
+	}
+	element, err := LoadByXml(string(xmlFile))
+	if err != nil {
+		panic("File [" + file + "] is Xml File ?")
+	}
+	out := outpath + string(os.PathSeparator) + simple
+	fmt.Println(file + " > " + out)
+
+	//递归修改每个节点的值
+	modifyElement(element)
+
+	ioutil.WriteFile(out, []byte(element.ToXML()), 0644)
+
+}
+
+/**
+ * path 不存在时创建目录
+ */
+func CreatePath(path string) {
+	exist, _ := pathExists(path)
+	if !exist {
+		os.Mkdir(path, 0644)
+	}
+
+}
+
+func pathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }

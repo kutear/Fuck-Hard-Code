@@ -155,12 +155,31 @@ func NewElement(elementName, elementValue string) (el *Element) {
 	return
 }
 
+func (t *Element) level() int {
+	i := 0
+	for t.Parent() != nil {
+		t = t.parent.(*Element)
+		i++
+	}
+	return i
+}
+
+func eachLineSpace(e *Element) string {
+	level := e.level()
+	res := ""
+	for i := 0; i < level; i++ {
+		res += "\t\t"
+	}
+	return res
+}
+
 func (t *Element) _string() string {
 	elementname := t.name
 	if t.space != "" {
 		elementname = fmt.Sprint(t.space, ":", elementname)
 	}
-	s := fmt.Sprint("<", elementname)
+	blank := eachLineSpace(t)
+	s := fmt.Sprint(blank, "<", elementname)
 	sattr := ""
 	if len(t.Attrs) > 0 {
 		for _, att := range t.Attrs {
@@ -168,16 +187,16 @@ func (t *Element) _string() string {
 			if att.space != "" {
 				attrname = fmt.Sprint(att.space, ":", attrname)
 			}
-			sattr = fmt.Sprint(sattr, " ", attrname, "=", "\"", att.Value, "\"")
+			sattr = fmt.Sprint(sattr, "\n", blank, "\t", attrname, "=", "\"", att.Value, "\"")
 		}
 	}
-	s = fmt.Sprint(s, sattr, ">")
+	s = fmt.Sprint(s, sattr, ">", "\n")
 	if len(t.childs) > 0 {
 		for _, v := range t.childs {
 			el := v.(*Element)
 			s = fmt.Sprint(s, el._string())
 		}
-		return fmt.Sprint(s, t.Value, "</", elementname, ">", "\n")
+		return fmt.Sprint(s, strings.Trim(strings.Trim(t.Value, " "), "\n"), blank, "</", elementname, ">", "\n")
 	} else {
 		return toStr(t)
 	}
@@ -185,16 +204,17 @@ func (t *Element) _string() string {
 
 func toStr(t *Element) string {
 	sattr := ""
+	blank := eachLineSpace(t)
 	if len(t.Attrs) > 0 {
 		for _, att := range t.Attrs {
 			attrname := att.name
 			if att.space != "" {
 				attrname = fmt.Sprint(att.space, ":", attrname)
 			}
-			sattr = fmt.Sprint(sattr, " ", attrname, "=", "\"", att.Value, "\"")
+			sattr = fmt.Sprint(sattr, "\n", blank, "\t", attrname, "=", "\"", att.Value, "\"")
 		}
 	}
-	return fmt.Sprint("<", t.name, sattr, ">", t.Value, "</", t.name, ">")
+	return fmt.Sprint(blank, "<", t.name, sattr, ">", t.Value, "\n", blank, "</", t.name, ">\n")
 }
 
 //return child element "name"
