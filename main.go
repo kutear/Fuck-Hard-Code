@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "./utils"
 	"fmt"
 	"github.com/kutear/Fuck-Hard-Code/utils"
+	_ "github.com/kutear/Fuck-Hard-Code/utils"
 	"io/ioutil"
 	"os"
 	"path/filepath"
