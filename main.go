@@ -1,33 +1,40 @@
 package main
 
 import (
+	"./utils"
+	_ "./utils"
+	"flag"
 	"fmt"
-	"github.com/kutear/Fuck-Hard-Code/utils"
-	_ "github.com/kutear/Fuck-Hard-Code/utils"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 )
 
 func main() {
-	//
-	//inPath := flag.String("input", "D:\\", "Layout根文件目录")
-	////outPath := flag.String("output", "D:\\", "文件输出目录")
-	//flag.Parse()
-	inPath := "G:\\ll"
-	outPath := "G:\\layout2"
-	utils.CreatePath(outPath)
-	err := filepath.Walk(inPath, func(file string, info os.FileInfo, err error) error {
+	inPath := flag.String("input", "", "The Path Of Layout Root")
+	outPath := flag.String("output", "", "文件输出目录")
+	//prefix := flag.String("p", "", "指定输出到strings.xml的key值前缀")
+	flag.Parse()
+	if *inPath == "" || *outPath == "" {
+		fmt.Println("please input -h to see usage")
+		return
+	}
+
+	utils.CreatePath(*outPath)
+	err := filepath.Walk(*inPath, func(file string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			fmt.Println("跳过目录" + file)
 			return nil
 		}
-		utils.DealFile(file, info.Name(), outPath)
+		utils.DealFile(file, info.Name(), *outPath)
 		return nil
 	})
 
-	ioutil.WriteFile(outPath+string(os.PathSeparator)+"dimens.xml", []byte(utils.GetDimen().ToXML()), 0644)
-	ioutil.WriteFile(outPath+string(os.PathSeparator)+"strings.xml", []byte(utils.GetString().ToXML()), 0644)
+	outResPath := *outPath + string(os.PathSeparator) + "out"
+	utils.CreatePath(outResPath)
+	str := "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n"
+	ioutil.WriteFile(outResPath+string(os.PathSeparator)+"dimens.xml", []byte(str+utils.GetDimen().ChildSingleLineOut()), 0644)
+	ioutil.WriteFile(outResPath+string(os.PathSeparator)+"strings.xml", []byte(str+utils.GetString().ChildSingleLineOut()), 0644)
 
 	if err != nil {
 		fmt.Println(err.Error())

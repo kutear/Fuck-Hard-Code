@@ -168,7 +168,7 @@ func eachLineSpace(e *Element) string {
 	level := e.level()
 	res := ""
 	for i := 0; i < level; i++ {
-		res += "\t\t"
+		res += "\t"
 	}
 	return res
 }
@@ -214,7 +214,11 @@ func toStr(t *Element) string {
 			sattr = fmt.Sprint(sattr, "\n", blank, "\t", attrname, "=", "\"", att.Value, "\"")
 		}
 	}
-	return fmt.Sprint(blank, "<", t.name, sattr, ">", t.Value, "\n", blank, "</", t.name, ">\n")
+	if t.Value != "" {
+		return fmt.Sprint(blank, "<", t.name, sattr, ">", t.Value, "\n", blank, "</", t.name, ">\n")
+	} else {
+		return fmt.Sprint(blank, "<", t.name, sattr, " />\n")
+	}
 }
 
 //return child element "name"
@@ -589,4 +593,51 @@ func space(spacename string) string {
 		spacename = spacename[i+1:]
 	}
 	return spacename
+}
+
+func (t *Element) ChildSingleLineOut() string {
+	str := ""
+	if len(t.childs) > 0 {
+		elementname := t.name
+		if t.space != "" {
+			elementname = fmt.Sprint(t.space, ":", elementname)
+		}
+		blank := eachLineSpace(t)
+
+		s := fmt.Sprint(blank, "<", elementname)
+		sattr := ""
+		if len(t.Attrs) > 0 {
+			for _, att := range t.Attrs {
+				attrname := att.name
+				if att.space != "" {
+					attrname = fmt.Sprint(att.space, ":", attrname)
+				}
+				sattr = fmt.Sprint(sattr, "\n", blank, "\t", attrname, "=", "\"", att.Value, "\"")
+			}
+		}
+		s = fmt.Sprint(s, sattr, ">", "\n")
+
+		for i := 0; i < len(t.childs); i++ {
+			s = fmt.Sprint(s, t.childs[i].(*Element).ChildSingleLineOut())
+		}
+
+		s = fmt.Sprint(s, "</"+t.Name()+">")
+
+		return s
+
+	} else {
+		blank := eachLineSpace(t)
+		sattr := ""
+		if len(t.Attrs) > 0 {
+			for _, att := range t.Attrs {
+				attrname := att.name
+				if att.space != "" {
+					attrname = fmt.Sprint(att.space, ":", attrname)
+				}
+				sattr = fmt.Sprint(sattr, "\t", attrname, "=", "\"", att.Value, "\"")
+			}
+		}
+		str = fmt.Sprint(blank, "<", t.Name(), sattr, ">", t.Value, "</", t.Name(), ">\n")
+	}
+	return str
 }

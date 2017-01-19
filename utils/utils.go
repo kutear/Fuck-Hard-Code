@@ -93,22 +93,30 @@ func modifyElement(element *Element) {
  * outpath 输出路径
  */
 func DealFile(file string, simple string, outpath string) {
+	if !strings.HasSuffix(file, "xml") {
+		fmt.Errorf("File [" + file + "] is Not XML")
+		return
+	}
+
 	xmlFile, err := ioutil.ReadFile(file)
 	if err != nil {
 		fmt.Println(err.Error())
 		panic("读取文件失败")
+		return
 	}
 	element, err := LoadByXml(string(xmlFile))
 	if err != nil {
 		panic("File [" + file + "] is Xml File ?")
+		return
 	}
 	out := outpath + string(os.PathSeparator) + simple
 	fmt.Println(file + " > " + out)
 
 	//递归修改每个节点的值
 	modifyElement(element)
-
-	ioutil.WriteFile(out, []byte(element.ToXML()), 0644)
+	str := "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n"
+	str += element.ToXML()
+	ioutil.WriteFile(out, []byte(str), 0644)
 
 }
 
