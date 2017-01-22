@@ -10,6 +10,8 @@
 [点击下载|Download](https://gobuilder.me/github.com/Kutear/Fuck-Hard-Code)
 
 # 用法
+![Example](http://kutear.qiniudn.com/2017/01/22/20170122134753.png)
+
 ```
 Fuck-Hard-Code -input="{layout path}" -output="{layout output path}"
 ```
@@ -86,4 +88,3 @@ Fuck-Hard-Code -input="{layout path}" -output="{layout output path}"
 
 这样就替换了布局中所有的硬编码格式。可以使用文件比较工具查看之后，没有问题就替换掉以前的布局代码
 
-![Example](http://kutear.qiniudn.com/2017/01/22/20170122134752.png)
