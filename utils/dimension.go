@@ -2,30 +2,36 @@ package utils
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
 
 var dimenElement *Element
-var dimenIndex int
+var kv map[string]string
 
 func init() {
 	dimenElement = NewElement("resources", "")
-	dimenIndex = 0
+	kv = make(map[string]string)
 }
 
 func modifyDimenAttr(attr *Attr) {
 	value := attr.Value
 	if isHardCodeDimen(value) {
-		suf := value[len(value)-2:]
+		suf := value[len(value)-2:] //px or dp and sp
 		temp := getDimenFromValue(value)
-		key := "dp_" + strconv.Itoa(dimenIndex)
-		attr.Value = "@dimen/" + key
 		res := fmt.Sprintf("%.1f", temp)
 		if suf == "px" {
 			suf = "dp"
 		}
-		addDimenItem(key, res+suf)
+		key := suf + "_" + fmt.Sprintf("%06.1f", temp)
+		key = strings.Replace(key, ".", "_", -1)
+		key = strings.Replace(key, "-", "n_", -1)
+		_, ok := kv[key]
+		if !ok {
+			addDimenItem(key, res+suf)
+		}
+		attr.Value = "@dimen/" + key
 	}
 }
 
@@ -49,12 +55,47 @@ func px2dp(px float64) float64 {
 }
 
 func addDimenItem(key, v string) {
-	node := NewElement("dimen", v)
-	node.AddAttr("name", key)
-	dimenIndex++
-	dimenElement.AddNode(node)
+	kv[key] = v
 }
 
 func GetDimen() *Element {
+	fmt.Println(kv)
+	dpmap := make(map[string]string)
+	for k, v := range kv {
+		if strings.HasPrefix(k, "dp") {
+			dpmap[k] = v
+		}
+	}
+	sortInsert(dpmap)
+	spmap := make(map[string]string)
+	for k, v := range kv {
+		if strings.HasPrefix(k, "sp") {
+			spmap[k] = v
+		}
+	}
+	sortInsert(spmap)
+
+	dimenElement.head = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	return dimenElement
+}
+
+func sortInsert(mp map[string]string) {
+	arr := make([]string, 0)
+
+	for k := range mp {
+		arr = append(arr, k)
+	}
+
+	sort.Strings(arr)
+
+	for i := 0; i < len(mp); i++ {
+		v := mp[arr[i]]
+		buildItem(arr[i], v)
+	}
+}
+
+func buildItem(key, v string) {
+	node := NewElement("dimen", v)
+	node.AddAttr("name", key)
+	dimenElement.AddNode(node)
 }
