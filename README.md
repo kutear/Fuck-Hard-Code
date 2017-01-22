@@ -11,7 +11,7 @@ Extraction string and dimens from layout,Merge into strings.xml and dimens.xml
 
 # Usage
 
-![Example](http://kutear.qiniudn.com/2017/01/22/20170122134752.png)
+![Example](http://kutear.qiniudn.com/2017/01/22/20170122134753.png)
 
 ```
 Fuck-Hard-Code -input="{layout path}" -output="{layout output path}"
