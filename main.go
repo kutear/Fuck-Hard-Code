@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"flag"
 	"flag"
 	"fmt"
 	"github.com/kutear/Fuck-Hard-Code/utils"
