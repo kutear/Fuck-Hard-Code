@@ -18,6 +18,11 @@ func init() {
 func modifyDimenAttr(attr *Attr) {
 	value := attr.Value
 	if isHardCodeDimen(value) {
+		//because dip == dp
+		if strings.HasSuffix(value, "dip") {
+			value = strings.Replace(value, "dip", "dp", -1)
+		}
+
 		suf := value[len(value)-2:] //px or dp and sp
 		temp := getDimenFromValue(value)
 		res := fmt.Sprintf("%.1f", temp)
