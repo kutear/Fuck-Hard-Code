@@ -43,7 +43,11 @@ Create New Android Application and modify main layout
 Now We Run This Tool
 
 ```
-> Fuck-Hard-Code -input="{project path/app/src/main/res/layout}" -output="{out path/layout}"
+#linux/mac
+./Fuck-Hard-Code -input="{layout path}" -output="{layout output path}"
+
+#windows
+Fuck-Hard-Code.exe -input="{layout path}" -output="{layout output path}"
 ```
 
 Ok,This Over,we Can See the file in {out path/layout} with

@@ -126,7 +126,7 @@ func DealFile(file string, simple string, outpath string) {
 func CreatePath(path string) {
 	exist, _ := pathExists(path)
 	if !exist {
-		os.Mkdir(path, 0644)
+		os.Mkdir(path, 0755)
 	}
 
 }

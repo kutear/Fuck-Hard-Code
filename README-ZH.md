@@ -13,7 +13,11 @@
 ![Example](http://kutear.qiniudn.com/2017/01/22/20170122134753.png)
 
 ```
-Fuck-Hard-Code -input="{layout path}" -output="{layout output path}"
+#linux/mac
+./Fuck-Hard-Code -input="{layout path}" -output="{layout output path}"
+
+#windows
+Fuck-Hard-Code.exe -input="{layout path}" -output="{layout output path}"
 ```
 
 执行之后你可以在这个目录`{layout output path}/out/`看见两个文件`strings.xml` 和 `dimens.xml`以及其他所有的layout文件在`{layout output path}/`
