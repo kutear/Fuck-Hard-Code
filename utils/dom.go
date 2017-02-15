@@ -56,6 +56,7 @@ func LoadByStream(r io.Reader) (current *Element, err error) {
 	decoder := xml.NewDecoder(r)
 	isRoot := true
 	head := ""
+	shortSpace := make(map[string]string)
 	for t, er := decoder.Token(); er == nil; t, er = decoder.Token() {
 		switch token := t.(type) {
 		case xml.StartElement:
@@ -71,7 +72,14 @@ func LoadByStream(r io.Reader) (current *Element, err error) {
 			el.isSync = false
 			for _, a := range token.Attr {
 				ar := new(Attr)
-				ar.space = space(a.Name.Space)
+				//fixed 命名空间为什么是全名，获取不到简称
+				if a.Name.Space == "xmlns" {
+					shortSpace[a.Value] = a.Name.Local
+					ar.space = "xmlns"
+				} else {
+					ar.space = shortSpace[a.Name.Space]
+				}
+
 				ar.name = a.Name.Local
 				ar.Value = a.Value
 				el.Attrs = append(el.Attrs, ar)

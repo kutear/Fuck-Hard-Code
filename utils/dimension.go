@@ -59,7 +59,6 @@ func addDimenItem(key, v string) {
 }
 
 func GetDimen() *Element {
-	fmt.Println(kv)
 	dpmap := make(map[string]string)
 	for k, v := range kv {
 		if strings.HasPrefix(k, "dp") {
