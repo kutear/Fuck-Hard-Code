@@ -70,11 +70,18 @@ func LoadByStream(r io.Reader) (current *Element, err error) {
 			el.lc = new(sync.RWMutex)
 			el.r = el
 			el.isSync = false
+
+			//先提取命名空间
+			for _, a := range token.Attr {
+				if a.Name.Space == "xmlns" {
+					shortSpace[a.Value] = a.Name.Local
+				}
+			}
+
 			for _, a := range token.Attr {
 				ar := new(Attr)
 				//fixed 命名空间为什么是全名，获取不到简称
 				if a.Name.Space == "xmlns" {
-					shortSpace[a.Value] = a.Name.Local
 					ar.space = "xmlns"
 				} else {
 					ar.space = shortSpace[a.Name.Space]

@@ -116,7 +116,7 @@ func DealFile(file string, simple string, outpath string) {
 	modifyElement(element)
 	str := "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n"
 	str += element.ToXML()
-	ioutil.WriteFile(out, []byte(str), 0644)
+	ioutil.WriteFile(out, []byte(str), 0755)
 
 }
 
