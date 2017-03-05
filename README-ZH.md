@@ -1,7 +1,7 @@
-# 英文文档
-[英文](./README.md)
-
 [![Build Status](https://travis-ci.org/Kutear/Fuck-Hard-Code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
+
+# Document for English
+[English](./README.md)
 
 # Android 硬编码提取工具
 
