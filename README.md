@@ -1,7 +1,7 @@
+[![Build Status](https://travis-ci.org/Kutear/Fuck-Hard-Code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
+
 # Document for Chinese
 [Chinese](./README-ZH.md)
-
-[![Build Status](https://travis-ci.org/Kutear/Fuck-Hard-Code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
 
 # Android hardcoding extraction tool
 
