@@ -10,7 +10,7 @@
 [点击下载|Download](https://gobuilder.me/github.com/Kutear/Fuck-Hard-Code)
 
 # 用法
-![Example](http://kutear.qiniudn.com/2017/01/22/20170122134753.png)
+![Example](http://kutear.qiniudn.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
 
 ```
 #linux/mac
