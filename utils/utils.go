@@ -1,134 +1,19 @@
 package utils
 
 import (
-	"fmt"
+	"github.com/kutear/fuck-hard-code/parse"
 	"io/ioutil"
 	"os"
-	"strings"
+	"sort"
 )
 
-var mAttrs map[string]bool
-
-func init() {
-	mAttrs = make(map[string]bool)
-	//常用的像素值
-	mAttrs["layout_width"] = true
-	mAttrs["layout_height"] = true
-	mAttrs["layout_margin"] = true
-	mAttrs["layout_marginBottom"] = true
-	mAttrs["layout_marginEnd"] = true
-	mAttrs["layout_marginLeft"] = true
-	mAttrs["layout_marginRight"] = true
-	mAttrs["layout_marginStart"] = true
-	mAttrs["layout_marginTop"] = true
-	mAttrs["padding"] = true
-	mAttrs["paddingBottom"] = true
-	mAttrs["paddingEnd"] = true
-	mAttrs["paddingLeft"] = true
-	mAttrs["paddingRight"] = true
-	mAttrs["paddingStart"] = true
-	mAttrs["paddingTop"] = true
-	mAttrs["textSize"] = true
-
-	//常用的字符值
-	mAttrs["text"] = true
-	mAttrs["hint"] = true
-}
-
-/**
- * 判断给定的输入是否是字符串硬编码
- * 在Android中非硬编码是指引用string.xml中的字符串
- * 即形如“@string/***”就是非硬编码
- */
-func isHardCodeString(str string) bool {
-	if strings.HasPrefix(str, "@string/") || strings.HasPrefix(str, "?") {
-		return false
-	}
-	return true
-}
-
-/**
- * 判断给定的输入是否是像素值硬编码
- * 在Android中非硬编码是指引用dimens.xml中的像素值
- * 即形如“@dimen/***”就是非硬编码
- */
-func isHardCodeDimen(str string) bool {
-	if str == "match_parent" || str == "wrap_content" || str == "fill_parent" || strings.HasPrefix(str, "@dimen/") ||
-		strings.HasPrefix(str, "?") {
-		return false
-	}
-	return true
-}
-
-/**
- * 对于指定的属性是否需要做检查
- */
-func needToCheck(attr string) bool {
-	return mAttrs[attr]
-}
-
-/**
- * 处理当页面
- */
-func modifyElement(element *Element) {
-	attrs := element.Attrs
-	for i := 0; i < len(attrs); i++ {
-		if needToCheck(attrs[i].Name()) {
-			if attrs[i].Name() == "text" || attrs[i].Name() == "hint" {
-				modifyStringAttr(attrs[i])
-			} else {
-				modifyDimenAttr(attrs[i])
-			}
-		}
-	}
-	childs := element.AllNodes()
-	for i := 0; i < len(childs); i++ {
-		modifyElement(childs[i])
-	}
-}
-
-/**
- * file 文件全路径
- * simple 文件名称
- * outpath 输出路径
- */
-func DealFile(file string, simple string, outpath string) {
-	if !strings.HasSuffix(file, "xml") {
-		fmt.Errorf("File [" + file + "] is Not XML")
-		return
-	}
-
-	xmlFile, err := ioutil.ReadFile(file)
-	if err != nil {
-		fmt.Println(err.Error())
-		panic("读取文件失败")
-		return
-	}
-	element, err := LoadByXml(string(xmlFile))
-	if err != nil {
-		panic("File [" + file + "] is Xml File ?")
-		return
-	}
-	out := outpath + string(os.PathSeparator) + simple
-	fmt.Println(file + " > " + out)
-
-	//递归修改每个节点的值
-	modifyElement(element)
-	str := "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n"
-	str += element.ToXML()
-	ioutil.WriteFile(out, []byte(str), 0755)
-
-}
-
-/**
- * path 不存在时创建目录
- */
-func CreatePath(path string) {
+//创建路径
+func CreatePath(path string) string {
 	exist, _ := pathExists(path)
 	if !exist {
 		os.Mkdir(path, 0755)
 	}
-
+	return path
 }
 
 func pathExists(path string) (bool, error) {
@@ -140,4 +25,40 @@ func pathExists(path string) (bool, error) {
 		return false, nil
 	}
 	return false, err
+}
+
+//检查数组中是否包含某个string
+func Contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+//文件写入
+func Write(data []byte, file string) {
+	ioutil.WriteFile(file, data, 0755)
+}
+
+//对map进行排序输出
+func SortMap(sortMap map[string]string) []parse.Node {
+	keys := make([]string, len(sortMap))
+	i := 0
+	for k := range sortMap {
+		keys[i] = k
+		i++
+	}
+	sort.Strings(keys)
+	ret := make([]parse.Node, len(sortMap))
+	i = 0
+	for _, v := range keys {
+		ret[i] = parse.Node{
+			Value: v,
+			Key:   sortMap[v],
+		}
+		i++
+	}
+	return ret
 }

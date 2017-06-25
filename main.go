@@ -2,40 +2,35 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"github.com/kutear/Fuck-Hard-Code/utils"
-	_ "github.com/kutear/Fuck-Hard-Code/utils"
-	"io/ioutil"
-	"os"
-	"path/filepath"
+	"github.com/kutear/fuck-hard-code/traversal"
+	"log"
+	"strings"
 )
 
+// 程序说明
+// 目的:  解决Android项目中遗留的硬编码问题
+// 参数:  layout:Android 项目中的layout目录
+//		 config: json文件,内部表示具体哪些字段需要被替换
+//		 existPixels:通常为/values/dimens.xml
+//       existStrings:通常为/values/strings.xml
+//		 scaleRatio:dp转化px的比例值 默认为3
+//       out:输出修改后layout目录,注意不要与输入layout的一样
 func main() {
-	inPath := flag.String("input", "", "The Path Of Layout Root")
-	outPath := flag.String("output", "", "文件输出目录")
+	layoutPath := flag.String("layout", "", "the path of $project/appmodule/src/main/res/layout")
+	configJson := flag.String("config", "", "configure file")
+	existPixels := flag.String("existPixels", "", "the path of $project/appmodule/src/main/res/values/dimens.xml")
+	existStrings := flag.String("existStrings", "", "the path of $project/appmodule/src/main/res/values/strings.xml")
+	scaleRatio := flag.Float64("scaleRatio", 3, "px to dp,default 3px == 1dp")
+	out := flag.String("out", "", "layout dir out path")
 	flag.Parse()
-	if *inPath == "" || *outPath == "" {
-		fmt.Println("please input -h to see usage")
-		return
+	checkArgs(*layoutPath, "layout")
+	checkArgs(*out, "out")
+	traversal.PreTraversal(*configJson, *existPixels, *existStrings, *scaleRatio, *out)
+	traversal.TraversalFile(*layoutPath)
+}
+
+func checkArgs(str, witch string) {
+	if len(strings.TrimSpace(str)) == 0 {
+		log.Fatalf("Args %s must be not Empty,Use -h to see all usage", witch)
 	}
-
-	utils.CreatePath(*outPath)
-	err := filepath.Walk(*inPath, func(file string, info os.FileInfo, err error) error {
-		if info.IsDir() {
-			fmt.Println("跳过目录" + file)
-			return nil
-		}
-		utils.DealFile(file, info.Name(), *outPath)
-		return nil
-	})
-
-	outResPath := *outPath + string(os.PathSeparator) + "out"
-	utils.CreatePath(outResPath)
-	ioutil.WriteFile(outResPath+string(os.PathSeparator)+"dimens.xml", []byte(utils.GetDimen().ChildSingleLineOut()), 0644)
-	ioutil.WriteFile(outResPath+string(os.PathSeparator)+"strings.xml", []byte(utils.GetString().ChildSingleLineOut()), 0644)
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
 }
