@@ -150,10 +150,13 @@ func (this *Element) ToXML() string {
 		ret += fmt.Sprintf(startNodeFormat(attrsCount != 0), this.Name.Local)
 	}
 	//属性
-
 	for index, att := range this.Attrs {
 		ret += spaceBlank(this.Depth)
-		ret += fmt.Sprintf(attrFormat(index == attrsCount-1), att.Name.ShortSpace, att.Name.Local, att.Value)
+		if len(att.Name.ShortSpace) > 0 {
+			ret += fmt.Sprintf(attrWithNsFormat(index == attrsCount-1), att.Name.ShortSpace, att.Name.Local, att.Value)
+		} else {
+			ret += fmt.Sprintf(attrFormat(index == attrsCount-1), att.Name.Local, att.Value)
+		}
 	}
 	if len(this.Child) > 0 {
 		ret += fmt.Sprint(">\n")
@@ -163,9 +166,9 @@ func (this *Element) ToXML() string {
 		}
 		ret += spaceBlank(this.Depth)
 		if this.Name.ShortSpace != "" {
-			ret += fmt.Sprintf("<%s:%s/>\n", this.Name.ShortSpace, this.Name.Local)
+			ret += fmt.Sprintf("</%s:%s>\n", this.Name.ShortSpace, this.Name.Local)
 		} else {
-			ret += fmt.Sprintf("<%s/>\n", this.Name.Local)
+			ret += fmt.Sprintf("</%s>\n", this.Name.Local)
 		}
 	} else {
 		ret += fmt.Sprint("/>\n")
@@ -188,11 +191,17 @@ func startNodeFormat(nextLine bool) string {
 	return "<%s"
 }
 
-func attrFormat(last bool) string {
+func attrWithNsFormat(last bool) string {
 	if last {
 		return "\t\t%s:%s=\"%s\""
 	}
 	return "\t\t%s:%s=\"%s\"\n"
+}
+func attrFormat(last bool) string {
+	if last {
+		return "\t\t%s=\"%s\""
+	}
+	return "\t\t%s=\"%s\"\n"
 }
 
 func spaceBlank(depth int) string {

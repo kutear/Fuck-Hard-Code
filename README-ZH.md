@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Kutear/fuck-hard-code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
+[![Build Status](https://travis-ci.org/Kutear/fuck-hard-code.svg?branch=master)](https://travis-ci.org/Kutear/fuck-hard-code)
 
 # Document for English
 [English](./README.md)
@@ -7,24 +7,22 @@
 
 提取Android Layout硬编码的string和dimens出来
 
-[点击下载|Download](https://gobuilder.me/github.com/Kutear/Fuck-Hard-Code)
+[点击下载|Download](https://gobuilder.me/github.com/Kutear/fuck-hard-code)
 
 # 用法
 ![Example](http://kutear.qiniudn.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
 
+>
+> **程序说明**
+> **目的**:  解决Android项目中遗留的硬编码问题
+> **参数**:  
+> - layout:Android 项目中的layout目录
+> - config: json文件,内部表示具体哪些字段需要被替换
+> - existPixels:通常为/values/dimens.xml
+> - existStrings:通常为/values/strings.xml
+> - scaleRatio:dp转化px的比例值 默认为3
+> - out:输出修改后layout目录,注意不要与输入layout的一样
 
-```
-
- 程序说明
- 目的:  解决Android项目中遗留的硬编码问题
- 参数:  layout:Android 项目中的layout目录
-       config: json文件,内部表示具体哪些字段需要被替换
-	   existPixels:通常为/values/dimens.xml
-       existStrings:通常为/values/strings.xml
-	   scaleRatio:dp转化px的比例值 默认为3
-       out:输出修改后layout目录,注意不要与输入layout的一样
-
-```
 
 执行之后你可以在这个目录`{layout output path}/out/`看见两个文件`strings.xml` 和 `dimens.xml`以及其他所有的layout文件在`{layout output path}/`
 
@@ -35,7 +33,6 @@
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
