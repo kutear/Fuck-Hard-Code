@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Kutear/Fuck-Hard-Code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
+[![Build Status](https://travis-ci.org/Kutear/fuck-hard-code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
 
 # Document for English
 [English](./README.md)
