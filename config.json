@@ -1,0 +1,35 @@
+{
+  "strings": [
+    {
+      "ns": "http://schemas.android.com/apk/res/android",
+      "items": [
+        "text",
+        "hint"
+      ]
+    }
+  ],
+  "dimens": [
+    {
+      "ns": "http://schemas.android.com/apk/res/android",
+      "items": [
+        "layout_width",
+        "layout_height",
+        "layout_margin",
+        "layout_marginBottom",
+        "layout_marginEnd",
+        "layout_marginLeft",
+        "layout_marginRight",
+        "layout_marginStart",
+        "layout_marginTop",
+        "padding",
+        "paddingBottom",
+        "paddingEnd",
+        "paddingLeft",
+        "paddingRight",
+        "paddingStart",
+        "paddingTop",
+        "textSize"
+      ]
+    }
+  ]
+}
