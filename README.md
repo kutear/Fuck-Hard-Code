@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Kutear/fuck-hard-code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
+[![Build Status](https://travis-ci.org/Kutear/fuck-hard-code.svg?branch=master)](https://travis-ci.org/Kutear/fuck-hard-code)
 
 # 中文文档
 [中文](./README-ZH.md)
@@ -13,17 +13,18 @@ Extraction string and dimens from layout,Merge into strings.xml and dimens.xml
 
 ![Example](http://kutear.qiniudn.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
 
-```
- Programs description
- Programs purpose:  fixed Android project Hard Code Problems
- Args:  layout:the path of $project/appmodule/src/main/res/layout
-       config: configure file
-	   existPixels:the path of $project/appmodule/src/main/res/values/dimens.xml
-       existStrings:the path of $project/appmodule/src/main/res/values/strings.xml
-	   scaleRatio:px to dp,default 3px == 1dp
-       out:layout dir out path
+> **Programs description**
+>
+> **Programs purpose**:  fixed Android project Hard Code Problems
+> **Args**:  
+>
+> - layout:the path of $project/appmodule/src/main/res/layout
+>  - config: configure file
+>  - existPixels:the path of $project/appmodule/src/main/res/values/dimens.xml
+>  - existStrings:the path of $project/appmodule/src/main/res/values/strings.xml
+>  - scaleRatio:px to dp,default 3px == 1dp
+>  - out:layout dir out path
 
-```
 after that you will see strings.xml and dimens.xml in `{layout output path}/out` and all xml file in `{layout output path}`
 
 # Example
