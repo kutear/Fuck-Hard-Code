@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Kutear/fuck-hard-code.svg?branch=master)](https://travis-ci.org/Kutear/fuck-hard-code)
+[![Build Status](https://travis-ci.org/Kutear/Fuck-Hard-Code.svg?branch=master)](https://travis-ci.org/Kutear/Fuck-Hard-Code)
 
 # 中文文档
 [中文](./README-ZH.md)
