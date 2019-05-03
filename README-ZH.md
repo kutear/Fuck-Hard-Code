@@ -10,7 +10,7 @@
 [点击下载|Download](https://gobuilder.me/github.com/Kutear/fuck-hard-code)
 
 # 用法
-![Example](http://kutear.qiniudn.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
+![Example](http://pic.kutear.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
 
 >
 > **程序说明**
