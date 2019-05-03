@@ -11,7 +11,7 @@ Extraction string and dimens from layout,Merge into strings.xml and dimens.xml
 
 # Usage
 
-![Example](http://kutear.qiniudn.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
+![Example](http://pic.kutear.com/2017/01/22/b728daeb8969e99f3502ccf246f104fd.png)
 
 > **Programs description**
 >
